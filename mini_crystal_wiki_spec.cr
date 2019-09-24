@@ -38,7 +38,7 @@ describe "Wiki" do
     html.should eq("one more<br/>\n<hr/>silver dollar<br/>\n")
   end
 
-  it "test_consiseInternalLinks" do
+  it "provides concise internal links" do
     
     got = activate_wiki_format("FrontPage")
     
