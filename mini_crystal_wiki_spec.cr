@@ -20,6 +20,8 @@ describe "Wiki" do
     assert_equal reference, sample
   end
   
+  # TODO  make external links clickable: https://twitter.com/davejorgenson/status/1176243940728684547
+  
   it "expands two, three, or five ticks" do
   
     html = activate_wiki_format("me '''''galo'''''mania")
@@ -42,8 +44,7 @@ describe "Wiki" do
     
     got = activate_wiki_format("FrontPage")
     
-    assert_match(/href="\/FrontPage/, got)
-    
+    assert_match(/href="\/FrontPage/, got)    
     doc = assert_html(got)
     doc.xpath("//a[ '/FrontPage' = @href ]/text()").to_s.should eq("FrontPage")
     assert_xpath(doc, "//a[ '/FrontPage' = @href ]/text()", /FrontPage/)
@@ -57,6 +58,15 @@ describe "Wiki" do
     deny_match(/href/, got)
   end
   
+  it "makes external links hot" do
+    
+    html = activate_wiki_format("oxford commas: https://twitter.com/davejorgenson/status/1176243940728684547 yo")
+    
+    html.should match(/oxford commas:/)
+    doc = assert_html(html)
+    doc.xpath("//a[ 'https://twitter.com/davejorgenson/status/1176243940728684547' = @href and '_blank' = @target ]/text()").to_s.should eq("https://twitter.com/davejorgenson/status/1176243940728684547")
+  end
+ 
   it "Crystagiri calls xpath on nodes correctly" do
     xml = "<html><body><hr/></body></html>"
     doc = Crystagiri::HTML.new(xml)

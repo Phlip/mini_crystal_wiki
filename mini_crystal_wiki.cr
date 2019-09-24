@@ -120,7 +120,8 @@ class Wiki
         [ "&",             "&amp;" ],
         [ "<",             "&lt;" ],
         [ ">",             "&gt;" ],
-        [ LocalLink, "<a href=\"/\\1\">\\1</a>" ],
+        [ /(https?:\/\/[^\ ]+)/, "<a href=\"\\1\" target=\"_blank\">\\1</a>" ],
+        [ LocalLink, "<a href=\"/\\1\">\\1</a>" ],  # TODO  what about LocalLinks inside urls?
         [ /([^']?)'''''([^'].*?)'''''/, "\\1<strong><em>\\2</em></strong>" ],
         [ /'''(.*?)'''/,   "<strong>\\1</strong>" ],
         [ /''(.*?)''/,     "<em>\\1</em>" ],
