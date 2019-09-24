@@ -9,7 +9,7 @@ server = HTTP::Server.new do |context|
     HTTP::FormData.parse(context.request) do |part|
         case part.name
         when "content"
-        content = part.body.gets_to_end
+          content = part.body.gets_to_end
         end
     end
   end
