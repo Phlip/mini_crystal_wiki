@@ -20,8 +20,6 @@ describe "Wiki" do
     assert_equal reference, sample
   end
   
-  # TODO  make external links clickable: https://twitter.com/davejorgenson/status/1176243940728684547
-  
   it "expands two, three, or five ticks" do
   
     html = activate_wiki_format("me '''''galo'''''mania")
