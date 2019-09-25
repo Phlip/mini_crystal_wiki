@@ -47,7 +47,7 @@ class Wiki
     
     return tag :html do
              tag :body do
-               tag(:h1){ page_name } +
+               tag(:h1){ page_name } + # TODO  also put the penBird on the edit page
                
                tag :form, { method: :post, action: "/#{page_name}", enctype: "multipart/form-data" } do
                  tag :textarea, { name: :content, rows: 20, cols: 80 } do
@@ -72,7 +72,18 @@ class Wiki
     return "<!DOCTYPE html>\n" +
            tag :html do
              tag :body do
-               tag("h1"){ page_name } + "<hr/>" +
+               tag :table do
+                 tag :thead do
+                   tag :tr do
+                     tag :td do
+                       tag :img, { src: "/penBird.png", width: "66", height: "53" } do "" end
+                     end +
+                     tag :td do                       
+                       tag("h1"){ page_name }
+                     end
+                   end
+                 end  
+               end +
                tag("article"){ format_article(contents) } + "<hr/>" +
                
                tag :table, { width: "100%" } do

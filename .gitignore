@@ -1,4 +1,4 @@
 trigger.rb
 lib
 shard.lock
-pages
+test_pages

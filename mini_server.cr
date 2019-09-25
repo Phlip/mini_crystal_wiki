@@ -2,19 +2,26 @@ require "http/server"
 require "./mini_crystal_wiki"
 
 server = HTTP::Server.new do |context|
-  context.response.content_type = "text/html"
-  content = ""
 
-  if context.request.method == "POST"
-    HTTP::FormData.parse(context.request) do |part|
-        case part.name
-        when "content"
-          content = part.body.gets_to_end
-        end
+  if context.request.path == "/penBird.png"
+    context.response.content_type = "image/png"
+    html = File.read("images/penBird.png")
+  else
+    context.response.content_type = "text/html"
+    content = ""
+
+    if context.request.method == "POST"
+      HTTP::FormData.parse(context.request) do |part|
+          case part.name
+          when "content"
+            content = part.body.gets_to_end
+          end
+      end
     end
+  
+    html = Wiki.serve("pages", context.request.method, context.request.path, content)
   end
- 
-  html = Wiki.serve("pages", context.request.method, context.request.path, content)
+  
   context.response.print html
 end
 
