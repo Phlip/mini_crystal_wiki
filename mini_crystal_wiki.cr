@@ -20,8 +20,8 @@ class Wiki
       File.write(page_at, content)
     end
     
-    exists = File.exists?(page_at)
- 
+    exists = File.exists?(page_at) && File.size(page_at) > 0
+
     if exists && page_name =~ /\A#{LocalLink}\Z/
       return wiki.format_page(page_name)
     end
@@ -82,14 +82,19 @@ class Wiki
     return "<!DOCTYPE html>\n" +
            tag :html do
              tag :body do
-               tag :table do
+               tag :table, { width: "100%" } do
                  tag :thead do
                    tag :tr do
-                     tag :td do
+                     tag :td, { width: "66" } do
                        tag(:img, { src: "/penBird.png", width: "66", height: "53" }){""}
                      end +
                      tag :td do
                        tag("h1"){ page_name }
+                     end +
+                     tag :td, { align: "right" } do 
+                       tag(:a, { href: "/AboutWiki" }){"AboutWiki"} + 
+                       " " + 
+                       tag(:a, { href: "/FrontPage" }){"FrontPage"}
                      end
                    end
                  end
