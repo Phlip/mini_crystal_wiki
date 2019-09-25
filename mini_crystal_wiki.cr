@@ -76,13 +76,13 @@ class Wiki
                  tag :thead do
                    tag :tr do
                      tag :td do
-                       tag :img, { src: "/penBird.png", width: "66", height: "53" } do "" end
+                       tag(:img, { src: "/penBird.png", width: "66", height: "53" }){""}
                      end +
-                     tag :td do                       
+                     tag :td do
                        tag("h1"){ page_name }
                      end
                    end
-                 end  
+                 end
                end +
                tag("article"){ format_article(contents) } + "<hr/>" +
                
@@ -93,10 +93,10 @@ class Wiki
                      tag :td, { align: "right" } do
                        onclick = "window.location.href = '/#{page_name}/edit';"
                        
-                       tag :button, { onclick: onclick } do 
+                       tag :button, { onclick: onclick } do
                          "Edit"
-                       end  
-                     end  
+                       end
+                     end
                    end
                  end
                end
