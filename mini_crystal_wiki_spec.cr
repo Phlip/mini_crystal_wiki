@@ -9,7 +9,7 @@ describe "Wiki" do
   it "marks up simple markup" do
     sample = activate_wiki_format("this is ''em''phatic\nthis is '''bold'''")
     reference = "this is <em>em</em>phatic<br/>\nthis is <strong>bold</strong><br/>\n"
-    assert_equal reference, sample
+    sample.should eq(reference)
   end
 
   it "escapes HTML" do
@@ -17,18 +17,18 @@ describe "Wiki" do
     sample = activate_wiki_format(">scr&eam<")
   
     reference = "&gt;scr&amp;eam&lt;<br/>\n"
-    assert_equal reference, sample
+    sample.should eq(reference)
   end
   
   it "expands two, three, or five ticks" do
   
     html = activate_wiki_format("me '''''galo'''''mania")
     
-    assert html.includes?("me <strong><em>galo</em></strong>mania")
+    html.includes?("me <strong><em>galo</em></strong>mania").should eq(true)
     
     html = activate_wiki_format("'''''megalomania'''''")
     
-    assert html.includes?("<strong><em>megalomania</em></strong>")
+    html.includes?("<strong><em>megalomania</em></strong>").should eq(true)
   end
 
   it "expands ---- into a horizontal rule" do
@@ -198,7 +198,7 @@ def assert_match(regex, sample)
 end
 
 def deny_match(regex, sample)
-  assert regex.match(sample) == nil
+  regex.match(sample).should eq(nil)
 end
 
 def activate_wiki_format(str)
@@ -209,7 +209,3 @@ end
 def assert_equal(reference, sample)
   sample.should eq(reference)
 end
-
-def assert(x)
-  x.should eq(true)
-end 
