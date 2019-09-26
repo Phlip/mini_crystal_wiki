@@ -197,7 +197,3 @@ def activate_wiki_format(str)
   wiki = Wiki.new("test_pages")
   return wiki.format_article(str)
 end
-
-def assert_equal(reference, sample)
-  sample.should eq(reference)
-end
