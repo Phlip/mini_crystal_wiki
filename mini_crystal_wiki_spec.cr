@@ -75,7 +75,7 @@ describe "Wiki" do
     hr = node.xpath_node("hr")
 
     hr.should_not be_nil
-    hr.name.should eq("hr") unless hr.nil?
+    hr.not_nil!.name.should eq("hr")
   end
 
   it "converts a page to HTML" do
