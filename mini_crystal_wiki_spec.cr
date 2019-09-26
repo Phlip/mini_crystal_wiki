@@ -6,7 +6,7 @@ require "file_utils"
 
 describe "Wiki" do 
 
-  it "test_simpleWikiMarkup" do
+  it "marks up simple markup" do
     sample = activate_wiki_format("this is ''em''phatic\nthis is '''bold'''")
     reference = "this is <em>em</em>phatic<br/>\nthis is <strong>bold</strong><br/>\n"
     assert_equal reference, sample
