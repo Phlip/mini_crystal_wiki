@@ -24,11 +24,11 @@ describe "Wiki" do
   
     html = activate_wiki_format("me '''''galo'''''mania")
     
-    html.includes?("me <strong><em>galo</em></strong>mania").should eq(true)
+    html.includes?("me <strong><em>galo</em></strong>mania").should be_true
     
     html = activate_wiki_format("'''''megalomania'''''")
     
-    html.includes?("<strong><em>megalomania</em></strong>").should eq(true)
+    html.includes?("<strong><em>megalomania</em></strong>").should be_true
   end
 
   it "expands ---- into a horizontal rule" do
@@ -42,7 +42,7 @@ describe "Wiki" do
     
     got = activate_wiki_format("FrontPage")
     
-    assert_match(/href="\/FrontPage/, got)    
+    got.should match(/href="\/FrontPage/)
     doc = assert_html(got)
     doc.xpath("//a[ '/FrontPage' = @href ]/text()").to_s.should eq("FrontPage")
     assert_xpath(doc, "//a[ '/FrontPage' = @href ]/text()", /FrontPage/)
