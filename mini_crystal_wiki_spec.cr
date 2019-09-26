@@ -69,12 +69,13 @@ describe "Wiki" do
     xml = "<html><body><hr/></body></html>"
     doc = Crystagiri::HTML.new(xml)
     node = doc.nodes.xpath_node("/html/body")
-    fail("bad") if node.nil?  #  Yay Crystal!  Nil-safety is just another type inference!
+    node.should_not be_nil    
+    fail("bad") if node.nil?  #  See https://forum.crystal-lang.org/t/var-should-not-be-nil-does-not-eliminate-var-of-nil-from-subsequent-type-inference/1165
     
     hr = node.xpath_node("hr")
-    
-    fail("bad") if hr.nil?
-    hr.name.should eq("hr")
+
+    hr.should_not be_nil
+    hr.name.should eq("hr") unless hr.nil?
   end
 
   it "converts a page to HTML" do
