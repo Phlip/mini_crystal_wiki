@@ -49,11 +49,11 @@ describe "Wiki" do
     
     got = activate_wiki_format("baBaLoo")
     
-    deny_match(/href/, got)
+    got.should_not match(/href/)
     
     got = activate_wiki_format("WinThirty2")
     
-    deny_match(/href/, got)
+    got.should_not match(/href/)
   end
   
   it "makes external links hot" do
@@ -195,10 +195,6 @@ end
 
 def assert_match(regex, sample)
   sample.should match(regex)
-end
-
-def deny_match(regex, sample)
-  regex.match(sample).should eq(nil)
 end
 
 def activate_wiki_format(str)
