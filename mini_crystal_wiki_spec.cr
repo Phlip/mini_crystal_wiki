@@ -193,10 +193,6 @@ def assert_xpath(doc : XML::Node, path : String, matcher = //)
   return node
 end
 
-def assert_match(regex, sample)
-  sample.should match(regex)
-end
-
 def activate_wiki_format(str)
   wiki = Wiki.new("test_pages")
   return wiki.format_article(str)
