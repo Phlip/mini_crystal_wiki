@@ -1,5 +1,7 @@
 
-LocalLink = /\b((?:[A-Z][a-z]+){2,})\b/  #  the heart of Wikidom... ;-)
+require "string_scanner"
+
+LocalLink = /\b(?:[A-Z][a-z]+){2,}\b/  #  the heart of Wikidom... ;-)
 
 class Wiki
 
