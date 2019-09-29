@@ -3,9 +3,45 @@ require "spec"
 require "./mini_crystal_wiki"
 require "crystagiri"
 require "file_utils"
+require "string_scanner"
 
-describe "Wiki" do 
+describe "Wiki" do
 
+  it "StringScanner scans strings" do
+    s = StringScanner.new("a aabbcc c")
+    s.eos?.should be_false
+    s.scan(/a/).should eq("a")
+    s.scan(/\s*/).should eq(" ")
+    s.scan(/aabbcc/).should eq("aabbcc")
+    s.scan(/\s*/).should eq(" ")
+    s.scan(/c/).should eq("c")
+    s.eos?.should be_true
+       
+    converters = [
+      { /aabbcc/, ->(s : String){ "<" + s + ">"} },
+      { /\s+/, ->(s : String){ s } },
+      { /a/, ->(s : String){ "z" } },
+      { /b/, ->(s : String){ "y" } },
+      { /c/, ->(s : String){ "x" } },
+    ]
+ 
+    s = StringScanner.new("a aabbcc c")
+    result = ""
+    
+    while ! s.eos?  # This is the pattern our lexer uses
+      converters.each do |(pattern, response)|    
+        got = s.scan(pattern)
+                
+        unless got.nil?
+          result += response.call(got)
+          break
+        end
+      end
+    end
+    
+    result.should eq("z <aabbcc> x")
+  end
+  
   it "marks up simple markup" do
     sample = activate_wiki_format("this is ''em''phatic\nthis is '''bold'''")
     reference = "this is <em>em</em>phatic<br/>\nthis is <strong>bold</strong><br/>\n"
@@ -64,7 +100,15 @@ describe "Wiki" do
     doc = assert_html(html)
     doc.xpath("//a[ 'https://twitter.com/davejorgenson/status/1176243940728684547' = @href and '_blank' = @target ]/text()").to_s.should eq("https://twitter.com/davejorgenson/status/1176243940728684547")
   end
- 
+
+  it "does not confuse internal and external links" do
+    s = "yo: https://www.google.com/?q=HowToPissOffYourPair InternalLink"
+    
+    html = activate_wiki_format(s)
+    html.should contain("yo: <a href=\"https://www.google.com/?q=HowToPissOffYourPair\" target=\"_blank\">https://www.google.com/?q=HowToPissOffYourPair</a> ")
+    html.should contain(" <a href=\"/InternalLink\">InternalLink</a>")
+  end
+  
   it "Crystagiri calls xpath on nodes correctly" do
     xml = "<html><body><hr/></body></html>"
     doc = Crystagiri::HTML.new(xml)

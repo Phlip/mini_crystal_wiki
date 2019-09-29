@@ -141,13 +141,32 @@ class Wiki
     return contents
   end
 
+  Conversions = [
+    { /https?:\/\/[^\ ]+/, ->(s : String){ "<a href=\"#{s}\" target=\"_blank\">#{s}</a>" } },
+    { LocalLink, ->(s : String){ "<a href=\"/#{s}\">#{s}</a>" } },
+    { /\s+/, ->(s : String){ s } },
+    { /&/, ->(s : String){ "&amp;" } },
+    { /</, ->(s : String){ "&lt;" } },
+    { />/, ->(s : String){ "&gt;" } },
+    { /./, ->(s : String){ s } }
+  ]
+    
   def format_wiki_line(line)
+    s = StringScanner.new(line)
+    line = ""
+    
+    while ! s.eos?
+      Conversions.each do |(pattern, effect)|
+        got = s.scan(pattern)
+        
+        unless got.nil?
+          line += effect.call(got)
+          break
+        end
+      end
+    end
+    
     [
-        [ "&",             "&amp;" ],
-        [ "<",             "&lt;" ],
-        [ ">",             "&gt;" ],
-        [ /(https?:\/\/[^\ ]+)/, "<a href=\"\\1\" target=\"_blank\">\\1</a>" ],
-        [ LocalLink, "<a href=\"/\\1\">\\1</a>" ],  # TODO  what about LocalLinks inside urls?
         [ /([^']?)'''''([^'].*?)'''''/, "\\1<strong><em>\\2</em></strong>" ],
         [ /'''(.*?)'''/,   "<strong>\\1</strong>" ],
         [ /''(.*?)''/,     "<em>\\1</em>" ],
