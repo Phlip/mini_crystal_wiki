@@ -101,6 +101,15 @@ describe "Wiki" do
     doc.xpath("//a[ 'https://twitter.com/davejorgenson/status/1176243940728684547' = @href and '_blank' = @target ]/text()").to_s.should eq("https://twitter.com/davejorgenson/status/1176243940728684547")
   end
 
+  it "makes external links to graphics extremely hot" do
+    
+    html = activate_wiki_format("fractal garden: http://flea.sourceforge.net/gardenOfEschereanDelights.jpg yo")
+    
+    html.should match(/fractal garden:/)
+    doc = assert_html(html)
+    assert_xpath doc, "//img[ 'http://flea.sourceforge.net/gardenOfEschereanDelights.jpg' = @src ]"
+  end
+
   it "does not confuse internal and external links" do
     s = "yo: https://www.google.com/?q=HowToPissOffYourPair InternalLink"
     
@@ -108,7 +117,7 @@ describe "Wiki" do
     html.should contain("yo: <a href=\"https://www.google.com/?q=HowToPissOffYourPair\" target=\"_blank\">https://www.google.com/?q=HowToPissOffYourPair</a> ")
     html.should contain(" <a href=\"/InternalLink\">InternalLink</a>")
   end
-  
+
   it "Crystagiri calls xpath on nodes correctly" do
     xml = "<html><body><hr/></body></html>"
     doc = Crystagiri::HTML.new(xml)
@@ -214,6 +223,8 @@ describe "Wiki" do
   end
   
 end  # TODO  add a DOCTYPE
+
+# TODO  if a link is not found in the pages folder, display it with a ?
 
 def assemble_test_wiki
   FileUtils.mkdir("test_pages") unless Dir.exists?("test_pages")

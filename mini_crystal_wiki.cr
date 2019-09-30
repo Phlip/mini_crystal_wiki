@@ -144,6 +144,7 @@ class Wiki
   end
 
   Conversions = [
+    { /https?:\/\/[^\ ]+.(png|jpg|gif|jpeg)/, ->(s : String){ "<img src=\"#{s}\" />" } },
     { /https?:\/\/[^\ ]+/, ->(s : String){ "<a href=\"#{s}\" target=\"_blank\">#{s}</a>" } },
     { LocalLink, ->(s : String){ "<a href=\"/#{s}\">#{s}</a>" } },
     { /\s+/, ->(s : String){ s } },
